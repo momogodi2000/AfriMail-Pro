@@ -1,0 +1,429 @@
+{% extends 'marketing/Marketing_base.html' %}
+
+{% block title %}AfriMail Pro - Marketing Dashboard{% endblock %}
+
+{% block page_title %}Marketing Dashboard{% endblock %}
+
+{% block page_subtitle %}Welcome back, {{ request.user.first_name }}! Here's what's happening with your campaigns today.{% endblock %}
+
+{% block header_actions %}
+<button type="button" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    <i class="fas fa-plus mr-2"></i> New Campaign
+</button>
+<button type="button" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+    <i class="fas fa-upload mr-2"></i> Import Contacts
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Total Contacts -->
+        <div class="bg-white overflow-hidden shadow rounded-lg transform transition hover:scale-105 duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
+                        <i class="fas fa-users text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Contacts</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">12,345</div>
+                            <div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+                                <i class="fas fa-arrow-up text-xs"></i>
+                                <span class="sr-only">Increased by</span>
+                                12.3%
+                            </div>
+                        </dd>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                <div class="text-sm">
+                    <a href="{% url 'contact_list' %}" class="font-medium text-indigo-600 hover:text-indigo-500"> View all contacts<span class="sr-only"> Total Contacts stats</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Campaigns -->
+        <div class="bg-white overflow-hidden shadow rounded-lg transform transition hover:scale-105 duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
+                        <i class="fas fa-envelope-open-text text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Active Campaigns</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">8</div>
+                            <div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+                                <i class="fas fa-arrow-up text-xs"></i>
+                                <span class="sr-only">Increased by</span>
+                                2.1%
+                            </div>
+                        </dd>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                <div class="text-sm">
+                    <a href="{% url 'campaign_list' %}" class="font-medium text-indigo-600 hover:text-indigo-500"> View all campaigns<span class="sr-only"> Active Campaigns stats</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Open Rate -->
+        <div class="bg-white overflow-hidden shadow rounded-lg transform transition hover:scale-105 duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
+                        <i class="fas fa-envelope-open text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Avg. Open Rate</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">32.5%</div>
+                            <div class="ml-2 flex items-baseline text-sm font-semibold text-green-600">
+                                <i class="fas fa-arrow-up text-xs"></i>
+                                <span class="sr-only">Increased by</span>
+                                1.8%
+                            </div>
+                        </dd>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                <div class="text-sm">
+                    <a href="{% url 'analytics_dashboard' %}" class="font-medium text-indigo-600 hover:text-indigo-500"> View analytics<span class="sr-only"> Avg Open Rate stats</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Click Rate -->
+        <div class="bg-white overflow-hidden shadow rounded-lg transform transition hover:scale-105 duration-300">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-purple-500 rounded-md p-3">
+                        <i class="fas fa-mouse-pointer text-white text-xl"></i>
+                    </div>
+                    <div class="ml-5 w-0 flex-1">
+                        <dt class="text-sm font-medium text-gray-500 truncate">Avg. Click Rate</dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-gray-900">5.7%</div>
+                            <div class="ml-2 flex items-baseline text-sm font-semibold text-red-600">
+                                <i class="fas fa-arrow-down text-xs"></i>
+                                <span class="sr-only">Decreased by</span>
+                                0.4%
+                            </div>
+                        </dd>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                <div class="text-sm">
+                    <a href="{% url 'analytics_dashboard' %}" class="font-medium text-indigo-600 hover:text-indigo-500"> View analytics<span class="sr-only"> Avg Click Rate stats</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Charts -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <!-- Campaign Performance Chart -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Campaign Performance (Last 30 Days)</h3>
+                <div class="mt-4">
+                    <canvas id="campaignChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audience Growth Chart -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Audience Growth (Last 12 Months)</h3>
+                <div class="mt-4">
+                    <canvas id="audienceChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Campaigns & Quick Actions -->
+    <div class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <!-- Recent Campaigns -->
+        <div class="bg-white overflow-hidden shadow rounded-lg lg:col-span-2">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Campaigns</h3>
+            </div>
+            <div class="bg-white overflow-hidden">
+                <ul class="divide-y divide-gray-200">
+                    <li>
+                        <a href="#" class="block hover:bg-gray-50">
+                            <div class="px-4 py-4 sm:px-6">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-indigo-600 truncate">Summer Sale 2023</p>
+                                    <div class="ml-2 flex-shrink-0 flex">
+                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 sm:flex sm:justify-between">
+                                    <div class="sm:flex">
+                                        <p class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-envelope-open mr-1.5 text-green-400"></i>
+                                            32.5% open rate
+                                        </p>
+                                        <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                            <i class="fas fa-mouse-pointer mr-1.5 text-purple-400"></i>
+                                            5.7% click rate
+                                        </p>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                        <i class="fas fa-calendar-alt mr-1.5 text-gray-400"></i>
+                                        <p>
+                                            Sent on <time datetime="2023-07-15">Jul 15, 2023</time>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="block hover:bg-gray-50">
+                            <div class="px-4 py-4 sm:px-6">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-indigo-600 truncate">New Product Launch</p>
+                                    <div class="ml-2 flex-shrink-0 flex">
+                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 sm:flex sm:justify-between">
+                                    <div class="sm:flex">
+                                        <p class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-envelope-open mr-1.5 text-green-400"></i>
+                                            28.1% open rate
+                                        </p>
+                                        <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                            <i class="fas fa-mouse-pointer mr-1.5 text-purple-400"></i>
+                                            4.2% click rate
+                                        </p>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                        <i class="fas fa-calendar-alt mr-1.5 text-gray-400"></i>
+                                        <p>
+                                            Sent on <time datetime="2023-07-10">Jul 10, 2023</time>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="block hover:bg-gray-50">
+                            <div class="px-4 py-4 sm:px-6">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-indigo-600 truncate">Weekly Newsletter #27</p>
+                                    <div class="ml-2 flex-shrink-0 flex">
+                                        <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Scheduled</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2 sm:flex sm:justify-between">
+                                    <div class="sm:flex">
+                                        <p class="flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-clock mr-1.5 text-blue-400"></i>
+                                            Scheduled for delivery
+                                        </p>
+                                    </div>
+                                    <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                                        <i class="fas fa-calendar-alt mr-1.5 text-gray-400"></i>
+                                        <p>
+                                            Scheduled for <time datetime="2023-07-18">Jul 18, 2023</time>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-gray-50 px-4 py-4 sm:px-6">
+                <div class="text-sm">
+                    <a href="{% url 'campaign_list' %}" class="font-medium text-indigo-600 hover:text-indigo-500"> View all campaigns<span class="sr-only"> Recent Campaigns</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-white overflow-hidden shadow rounded-lg">
+            <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Quick Actions</h3>
+            </div>
+            <div class="px-4 py-5 sm:p-6">
+                <div class="space-y-4">
+                    <a href="{% url 'campaign_create' %}" class="group block w-full bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-500 hover:ring-1 hover:ring-indigo-500 transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-indigo-100 rounded-md p-3">
+                                <i class="fas fa-plus text-indigo-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">Create New Campaign</h3>
+                                <p class="text-sm text-gray-500">Design and send a new email campaign</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'contact_import' %}" class="group block w-full bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-500 hover:ring-1 hover:ring-indigo-500 transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-green-100 rounded-md p-3">
+                                <i class="fas fa-file-import text-green-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">Import Contacts</h3>
+                                <p class="text-sm text-gray-500">Add new contacts from CSV, Excel or vCard</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'template_create' %}" class="group block w-full bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-500 hover:ring-1 hover:ring-indigo-500 transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-100 rounded-md p-3">
+                                <i class="fas fa-file-alt text-yellow-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">Create Template</h3>
+                                <p class="text-sm text-gray-500">Design a new email template for future use</p>
+                            </div>
+                        </div>
+                    </a>
+                    <a href="{% url 'automation_create' %}" class="group block w-full bg-white border border-gray-200 rounded-lg p-4 hover:border-indigo-500 hover:ring-1 hover:ring-indigo-500 transition">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-purple-100 rounded-md p-3">
+                                <i class="fas fa-robot text-purple-600"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-sm font-medium text-gray-900 group-hover:text-indigo-600">Setup Automation</h3>
+                                <p class="text-sm text-gray-500">Create automated email sequences</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_scripts %}
+<script>
+    // Campaign Performance Chart
+    const campaignCtx = document.getElementById('campaignChart').getContext('2d');
+    const campaignChart = new Chart(campaignCtx, {
+        type: 'line',
+        data: {
+            labels: ['Jun 15', 'Jun 20', 'Jun 25', 'Jun 30', 'Jul 5', 'Jul 10', 'Jul 15'],
+            datasets: [
+                {
+                    label: 'Open Rate',
+                    data: [25, 28, 30, 32, 31, 29, 32.5],
+                    borderColor: '#10B981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Click Rate',
+                    data: [4.5, 5.1, 5.3, 5.7, 5.5, 5.2, 5.7],
+                    borderColor: '#8B5CF6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.dataset.label + ': ' + context.raw + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 50,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Audience Growth Chart
+    const audienceCtx = document.getElementById('audienceChart').getContext('2d');
+    const audienceChart = new Chart(audienceCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+                label: 'Contacts',
+                data: [8500, 8900, 9100, 9400, 9800, 10200, 10500, 10800, 11200, 11500, 11800, 12345],
+                backgroundColor: 'rgba(79, 70, 229, 0.7)',
+                borderColor: 'rgba(79, 70, 229, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Contacts: ' + context.raw.toLocaleString();
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: function(value) {
+                            return value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Animate stats cards on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const statsCards = document.querySelectorAll('.transform');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('hover:scale-105');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        statsCards.forEach(card => {
+            observer.observe(card);
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

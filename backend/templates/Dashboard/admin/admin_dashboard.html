@@ -1,0 +1,490 @@
+{% extends "Layout/admin_base.html" %}
+{% load static %}
+
+
+{% block title %}AfriMail Pro - Tableau de bord Super Admin{% endblock %}
+
+{% block page_title %}Tableau de bord Super Admin{% endblock %}
+
+{% block content %}
+<div class="px-6 py-6">
+    <!-- Welcome Banner -->
+    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg overflow-hidden mb-8 transform transition-all duration-300 hover:shadow-2xl">
+        <div class="p-6 md:p-8 flex flex-col md:flex-row items-center justify-between">
+            <div class="text-white">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">Bienvenue, Super Admin</h2>
+                <p class="text-blue-100 max-w-2xl">Gérez l'ensemble de la plateforme AfriMail Pro avec ce tableau de bord complet. Surveillez les performances, configurez les paramètres et assurez le bon fonctionnement du système.</p>
+            </div>
+            <div class="mt-4 md:mt-0">
+                <div class="bg-white bg-opacity-20 backdrop-filter backdrop-blur-sm rounded-lg p-4 text-center">
+                    <p class="text-blue-100 text-sm">Statut du système</p>
+                    <div class="flex items-center justify-center mt-1">
+                        <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                        <span class="text-white font-medium">Tous les systèmes fonctionnent</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <!-- Total Companies -->
+        <div class="bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Entreprises Client</p>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-1">1,248</h3>
+                    <p class="text-green-600 text-xs mt-2">
+                        <i class="fas fa-arrow-up mr-1"></i> 12.5% ce mois-ci
+                    </p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg text-blue-600">
+                    <i class="fas fa-building text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Active Campaigns -->
+        <div class="bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Campagnes Actives</p>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-1">3,742</h3>
+                    <p class="text-green-600 text-xs mt-2">
+                        <i class="fas fa-arrow-up mr-1"></i> 8.3% cette semaine
+                    </p>
+                </div>
+                <div class="bg-purple-100 p-3 rounded-lg text-purple-600">
+                    <i class="fas fa-envelope-open-text text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Emails Sent -->
+        <div class="bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Emails Envoyés</p>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-1">2.4M</h3>
+                    <p class="text-green-600 text-xs mt-2">
+                        <i class="fas fa-arrow-up mr-1"></i> 22.1% ce mois-ci
+                    </p>
+                </div>
+                <div class="bg-green-100 p-3 rounded-lg text-green-600">
+                    <i class="fas fa-paper-plane text-xl"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Revenue -->
+        <div class="bg-white rounded-xl shadow-md p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm font-medium">Revenu Mensuel</p>
+                    <h3 class="text-2xl font-bold text-gray-800 mt-1">$24,580</h3>
+                    <p class="text-green-600 text-xs mt-2">
+                        <i class="fas fa-arrow-up mr-1"></i> 5.7% ce mois-ci
+                    </p>
+                </div>
+                <div class="bg-yellow-100 p-3 rounded-lg text-yellow-600">
+                    <i class="fas fa-dollar-sign text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Platform Activity -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Activité de la Plateforme</h3>
+                <div class="flex items-center space-x-2">
+                    <button class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full">7 jours</button>
+                    <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">30 jours</button>
+                    <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">90 jours</button>
+                </div>
+            </div>
+            <div class="h-64">
+                <canvas id="platformActivityChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Recent Companies -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Nouvelles Entreprises</h3>
+                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Voir tout</a>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <img src="https://via.placeholder.com/40" alt="Company Logo" class="w-10 h-10 rounded-full object-cover">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-800">AfriTech Solutions</p>
+                        <p class="text-xs text-gray-500">Inscrit il y a 2 heures</p>
+                    </div>
+                    <div class="ml-auto">
+                        <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <img src="https://via.placeholder.com/40" alt="Company Logo" class="w-10 h-10 rounded-full object-cover">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-800">Ecom Africa</p>
+                        <p class="text-xs text-gray-500">Inscrit hier</p>
+                    </div>
+                    <div class="ml-auto">
+                        <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <img src="https://via.placeholder.com/40" alt="Company Logo" class="w-10 h-10 rounded-full object-cover">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-800">AgriConnect</p>
+                        <p class="text-xs text-gray-500">Inscrit il y a 2 jours</p>
+                    </div>
+                    <div class="ml-auto">
+                        <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded-full">En attente</span>
+                    </div>
+                </div>
+                <div class="flex items-center p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                    <img src="https://via.placeholder.com/40" alt="Company Logo" class="w-10 h-10 rounded-full object-cover">
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-gray-800">MediCare Africa</p>
+                        <p class="text-xs text-gray-500">Inscrit il y a 3 jours</p>
+                    </div>
+                    <div class="ml-auto">
+                        <span class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Second Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Email Performance -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Performance des Emails</h3>
+                <div class="flex items-center space-x-2">
+                    <button class="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded-full">7 jours</button>
+                    <button class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">30 jours</button>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Taux d'ouverture</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-800">28.4%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-blue-500 h-2 rounded-full" style="width: 28.4%"></div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Taux de clic</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-800">6.2%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 6.2%"></div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Taux de rebond</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-800">2.1%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-red-500 h-2 rounded-full" style="width: 2.1%"></div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-purple-500 rounded-full mr-2"></div>
+                        <span class="text-sm text-gray-600">Taux de désabonnement</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-800">0.8%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-purple-500 h-2 rounded-full" style="width: 0.8%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SMTP Health -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Santé SMTP</h3>
+                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Gérer</a>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm font-medium text-gray-800">Serveur Principal</span>
+                    </div>
+                    <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">97.8%</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-sm font-medium text-gray-800">Serveur Secondaire</span>
+                    </div>
+                    <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded-full">99.2%</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
+                        <span class="text-sm font-medium text-gray-800">Serveur de Fallback</span>
+                    </div>
+                    <span class="text-xs px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full">85.5%</span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                        <span class="text-sm font-medium text-gray-800">Serveur Archive</span>
+                    </div>
+                    <span class="text-xs px-2 py-1 bg-red-100 text-red-800 rounded-full">Offline</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="bg-white rounded-xl shadow-md p-6">
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold text-gray-800">Actions Rapides</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <a href="#" class="flex flex-col items-center justify-center p-4 bg-blue-50 rounded-lg text-center hover:bg-blue-100 transition-colors">
+                    <i class="fas fa-user-plus text-blue-600 text-xl mb-2"></i>
+                    <span class="text-sm font-medium text-gray-800">Ajouter Utilisateur</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-4 bg-purple-50 rounded-lg text-center hover:bg-purple-100 transition-colors">
+                    <i class="fas fa-building text-purple-600 text-xl mb-2"></i>
+                    <span class="text-sm font-medium text-gray-800">Ajouter Entreprise</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-4 bg-green-50 rounded-lg text-center hover:bg-green-100 transition-colors">
+                    <i class="fas fa-globe text-green-600 text-xl mb-2"></i>
+                    <span class="text-sm font-medium text-gray-800">Vérifier Domaine</span>
+                </a>
+                <a href="#" class="flex flex-col items-center justify-center p-4 bg-yellow-50 rounded-lg text-center hover:bg-yellow-100 transition-colors">
+                    <i class="fas fa-file-export text-yellow-600 text-xl mb-2"></i>
+                    <span class="text-sm font-medium text-gray-800">Exporter Rapports</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-800">Activité Récente</h3>
+            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Voir tout</a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Détails</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Heure</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="{% static 'images/avatar/avatar-admin.jpg' %}" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Super Admin</div>
+                                    <div class="text-sm text-gray-500">admin@afrimailpro.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Configuration</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A mis à jour les paramètres SMTP globaux</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Il y a 15 minutes</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">AfriTech Solutions</div>
+                                    <div class="text-sm text-gray-500">marketing@afritech.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Campagne</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A lancé une campagne "Lancement Produit"</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Il y a 2 heures</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="https://via.placeholder.com/40" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Ecom Africa</div>
+                                    <div class="text-sm text-gray-500">contact@ecomafrica.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Domaine</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A ajouté un nouveau domaine personnalisé</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Aujourd'hui, 09:45</td>
+                    </tr>
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 h-10 w-10">
+                                    <img class="h-10 w-10 rounded-full" src="{% static 'images/avatar-admin.png' %}" alt="">
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">Super Admin</div>
+                                    <div class="text-sm text-gray-500">admin@afrimailpro.com</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Système</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">A effectué une sauvegarde de la base de données</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hier, 23:30</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Platform Activity Chart
+        const ctx = document.getElementById('platformActivityChart').getContext('2d');
+        const platformActivityChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                datasets: [
+                    {
+                        label: 'Emails Envoyés',
+                        data: [12000, 19000, 15000, 22000, 20000, 18000, 24000],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Nouvelles Entreprises',
+                        data: [5, 8, 6, 12, 10, 7, 15],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    },
+                    {
+                        label: 'Revenu (en k$)',
+                        data: [2.1, 3.2, 2.8, 4.0, 3.7, 3.1, 4.5],
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.05)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                if (value >= 1000) {
+                                    return value / 1000 + 'k';
+                                }
+                                return value;
+                            }
+                        }
+                    },
+                    y1: {
+                        position: 'right',
+                        beginAtZero: true,
+                        grid: {
+                            drawOnChartArea: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value + 'k';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+        
+        // Add hover effect to all cards
+        const cards = document.querySelectorAll('.transform');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.classList.add('shadow-lg');
+            });
+            card.addEventListener('mouseleave', function() {
+                this.classList.remove('shadow-lg');
+            });
+        });
+    });
+</script>
+{% endblock %}

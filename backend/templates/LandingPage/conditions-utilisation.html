@@ -1,0 +1,368 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfriMail Pro - Conditions d'Utilisation</title>
+    <meta name="description" content="Conditions d'utilisation de la plateforme AfriMail Pro pour le marketing email professionnel en Afrique.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'african-gold': '#FFD700',
+                        'safari-green': '#228B22',
+                        'sunset-orange': '#FF6B35',
+                        'earth-brown': '#8B4513',
+                        'sky-blue': '#87CEEB'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'bounce-gentle': 'bounceGentle 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translatey(0px)' },
+                            '50%': { transform: 'translatey(-20px)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        bounceGentle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #FFD700, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .african-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(34, 139, 34, 0.1) 0%, transparent 50%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .floating-elements::before,
+        .floating-elements::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .floating-elements::before {
+            background: linear-gradient(45deg, #FFD700, #FF6B35);
+            top: 10%;
+            left: 10%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .floating-elements::after {
+            background: linear-gradient(45deg, #228B22, #87CEEB);
+            bottom: 10%;
+            right: 10%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        
+        .content-section {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #FFD700, #FF6B35);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-x-hidden">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-effect transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">AfriMail Pro</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{% url 'homepage' %}" class="hover:text-african-gold transition-colors">Accueil</a>
+                    <a href="{% url 'login' %}" class="hover:text-african-gold transition-colors">Connexion</a>
+                    <a href="{% url 'register' %}" class="bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-2 rounded-full hover:scale-105 transition-transform">
+                        Créer un Compte
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-gray-900 bg-opacity-95" id="mobile-menu">
+            <div class="px-6 py-4 space-y-4">
+                <a href="{% url 'homepage' %}" class="block hover:text-african-gold transition-colors">Accueil</a>
+                <a href="{% url 'login' %}" class="block hover:text-african-gold transition-colors">Connexion</a>
+                <a href="{% url 'register' %}" class="w-full bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-3 rounded-full mt-4 block text-center">
+                    Créer un Compte
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="relative min-h-screen pt-32 pb-20 african-pattern">
+        <div class="floating-elements"></div>
+        <div class="container mx-auto px-6">
+            <div class="glass-effect p-8 rounded-2xl shadow-2xl card-hover">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl font-bold mb-4 gradient-text">Conditions d'Utilisation</h1>
+                    <p class="text-gray-300 max-w-3xl mx-auto">Dernière mise à jour: 15 juin 2024</p>
+                </div>
+                
+                <div class="space-y-12">
+                    <!-- Section 1 -->
+                    <div class="content-section" style="animation-delay: 0.2s;">
+                        <h2 class="text-2xl font-semibold mb-4 section-title">1. Acceptation des Conditions</h2>
+                        <div class="space-y-4 text-gray-300">
+                            <p>En accédant et en utilisant la plateforme AfriMail Pro, vous acceptez d'être lié par ces conditions d'utilisation, toutes les lois et réglementations applicables, et vous convenez que vous êtes responsable du respect de toutes les lois locales applicables.</p>
+                            <p>Si vous n'acceptez pas ces conditions, il vous est interdit d'utiliser ou d'accéder à ce site. Les matériaux contenus dans ce site sont protégés par les lois applicables sur le droit d'auteur et la marque de commerce.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 2 -->
+                    <div class="content-section" style="animation-delay: 0.4s;">
+                        <h2 class="text-2xl font-semibold mb-4 section-title">2. Licence d'Utilisation</h2>
+                        <div class="space-y-4 text-gray-300">
+                            <p>Il est permis de télécharger temporairement une copie des matériaux (informations ou logiciels) sur le site AfriMail Pro pour un usage personnel et non commercial transitoire uniquement.</p>
+                            <p>Il s'agit de la concession d'une licence, non d'un transfert de titre, et en vertu de cette licence, vous ne pouvez pas:</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>Modifier ou copier les matériaux</li>
+                                <li>Utiliser les matériaux à des fins commerciales ou pour toute exposition publique (commerciale ou non commerciale)</li>
+                                <li>Tenter de décompiler ou de faire de l'ingénierie inverse sur un logiciel contenu sur le site AfriMail Pro</li>
+                                <li>Supprimer tout copyright ou autre notation de propriété des matériaux</li>
+                                <li>Transférer les matériaux à une autre personne ou "miroiter" les matériaux sur un autre serveur</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 3 -->
+                    <div class="content-section" style="animation-delay: 0.6s;">
+                        <h2 class="text-2xl font-semibold mb-4 section-title">3. Responsabilités des Utilisateurs</h2>
+                        <div class="space-y-4 text-gray-300">
+                            <p>En tant qu'utilisateur d'AfriMail Pro, vous vous engagez à:</p>
+                            <ul class="list-disc pl-6 space-y-2">
+                                <li>Fournir des informations exactes et à jour lors de votre inscription</li>
+                                <li>Maintenir la confidentialité de votre compte et mot de passe</li>
+                                <li>Respecter toutes les lois locales et internationales relatives au marketing par email, y compris les lois anti-spam</li>
+                                <li>Ne pas utiliser la plateforme pour envoyer des contenus illégaux, trompeurs, diffamatoires, obscènes ou offensants</li>
+                                <li>Ne pas perturber ou tenter de perturber la sécurité ou la fonctionnalité du service</li>
+                            </ul>
+                            <p>AfriMail Pro se réserve le droit de suspendre ou de résilier immédiatement tout compte violant ces conditions sans préavis.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 4 -->
+                    <div class="content-section" style="animation-delay: 0.8s;">
+                        <h2 class="text-2xl font-semibold mb-4 section-title">4. Limitations</h2>
+                        <div class="space-y-4 text-gray-300">
+                            <p>En aucun cas AfriMail Pro ou ses fournisseurs ne seront responsables de tout dommage (y compris, sans limitation, les dommages pour perte de données ou de profit, ou en raison d'une interruption d'activité) découlant de l'utilisation ou de l'impossibilité d'utiliser les matériaux sur AfriMail Pro, même si AfriMail Pro ou un représentant autorisé d'AfriMail Pro a été informé oralement ou par écrit de la possibilité de tels dommages.</p>
+                            <p>Certaines juridictions ne permettent pas de limiter les garanties implicites ou les limitations de responsabilité pour les dommages indirects ou accessoires, ces limitations peuvent donc ne pas s'appliquer à vous.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 5 -->
+                    <div class="content-section" style="animation-delay: 1s;">
+                        <h2 class="text-2xl font-semibold mb-4 section-title">5. Modifications des Conditions</h2>
+                        <div class="space-y-4 text-gray-300">
+                            <p>AfriMail Pro peut réviser ces conditions d'utilisation pour son site web à tout moment sans préavis. En utilisant ce site web, vous acceptez d'être lié par la version alors en vigueur de ces conditions d'utilisation.</p>
+                            <p>Nous vous encourageons à consulter régulièrement cette page pour prendre connaissance des éventuelles modifications. Votre utilisation continue du service après la publication des modifications constitue votre acceptation de ces modifications.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Section 6 -->
+                    <div class="content-section" style="animation-delay: 1.2s;">
+                        <h2 class="text-2xl font-semibold mb-4 section-title">6. Loi Applicable</h2>
+                        <div class="space-y-4 text-gray-300">
+                            <p>Tout litige relatif à AfriMail Pro sera soumis à la juridiction des tribunaux du Cameroun, sans égard à ses dispositions relatives aux conflits de lois.</p>
+                            <p>Les présentes conditions d'utilisation sont régies et interprétées conformément aux lois du Cameroun, et vous vous soumettez irrévocablement à la juridiction exclusive des tribunaux de cet État ou lieu.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Section -->
+                    <div class="content-section pt-8" style="animation-delay: 1.4s;">
+                        <div class="border-t border-gray-700 pt-8">
+                            <h2 class="text-2xl font-semibold mb-4 section-title">Contactez-nous</h2>
+                            <p class="text-gray-300 mb-6">Si vous avez des questions concernant nos conditions d'utilisation, n'hésitez pas à nous contacter:</p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <a href="mailto:contact@afrimailpro.com" class="flex items-center text-african-gold hover:text-sunset-orange transition-colors">
+                                    <i class="fas fa-envelope mr-2"></i> contact@afrimailpro.com
+                                </a>
+                                <a href="tel:+237123456789" class="flex items-center text-african-gold hover:text-sunset-orange transition-colors">
+                                    <i class="fas fa-phone mr-2"></i> +237 123 456 789
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating 3D Elements -->
+        <div class="absolute top-20 left-10 opacity-30 animate-float">
+            <div class="w-20 h-20 bg-gradient-to-r from-african-gold to-sunset-orange rounded-xl transform rotate-12"></div>
+        </div>
+        <div class="absolute bottom-20 right-10 opacity-30 animate-float" style="animation-delay: -3s;">
+            <div class="w-16 h-16 bg-gradient-to-r from-safari-green to-sky-blue rounded-full"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="w-8 h-8 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">AfriMail Pro</span>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-african-gold transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-sky-blue transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-safari-green transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-sunset-orange transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-6 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>© 2024 AfriMail Pro. Tous droits réservés. <a href="{% url 'policy' %}" class="text-african-gold hover:underline">Politique de Confidentialité</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.add('bg-gray-900');
+                navbar.classList.remove('bg-opacity-50');
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.classList.remove('bg-gray-900');
+                navbar.classList.add('bg-opacity-50');
+            }
+        });
+        
+        // Animate sections on scroll
+        const sections = document.querySelectorAll('.content-section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

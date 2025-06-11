@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfriMail Pro - Connectez l'Afrique, Un Email à la Fois</title>
+    <meta name="description" content="Plateforme de marketing email professionnelle adaptée aux PME africaines. Automatisez vos campagnes, gérez vos contacts et boostez vos ventes avec AfriMail Pro.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'african-gold': '#FFD700',
+                        'safari-green': '#228B22',
+                        'sunset-orange': '#FF6B35',
+                        'earth-brown': '#8B4513',
+                        'sky-blue': '#87CEEB'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'bounce-gentle': 'bounceGentle 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translatey(0px)' },
+                            '50%': { transform: 'translatey(-20px)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        bounceGentle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #FFD700, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .african-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(34, 139, 34, 0.1) 0%, transparent 50%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .floating-elements::before,
+        .floating-elements::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .floating-elements::before {
+            background: linear-gradient(45deg, #FFD700, #FF6B35);
+            top: 10%;
+            left: 10%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .floating-elements::after {
+            background: linear-gradient(45deg, #228B22, #87CEEB);
+            bottom: 10%;
+            right: 10%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-x-hidden">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-effect transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">AfriMail Pro</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="hover:text-african-gold transition-colors">Fonctionnalités</a>
+                    <a href="#pricing" class="hover:text-african-gold transition-colors">Tarifs</a>
+                    <a href="#testimonials" class="hover:text-african-gold transition-colors">Témoignages</a>
+                    <a href="#contact" class="hover:text-african-gold transition-colors">Contact</a>
+                 <button 
+                    onclick="window.location.href='/login'" 
+                    class="bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-2 rounded-full hover:scale-105 transition-transform">
+                    Commencer Gratuitement
+                    </button>
+
+
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-gray-900 bg-opacity-95" id="mobile-menu">
+            <div class="px-6 py-4 space-y-4">
+                <a href="#features" class="block hover:text-african-gold transition-colors">Fonctionnalités</a>
+                <a href="#pricing" class="block hover:text-african-gold transition-colors">Tarifs</a>
+                <a href="#testimonials" class="block hover:text-african-gold transition-colors">Témoignages</a>
+                <a href="#contact" class="block hover:text-african-gold transition-colors">Contact</a>
+                <button 
+                    onclick="window.location.href='/login'" 
+                    class="bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-2 rounded-full hover:scale-105 transition-transform">
+                    Commencer Gratuitement
+                    </button>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center african-pattern">
+        <div class="floating-elements"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div data-aos="fade-up" data-aos-duration="1000">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    <span class="gradient-text">Connectez l'Afrique</span><br>
+                    <span class="text-white">Un Email à la Fois</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    La première plateforme de marketing email conçue spécialement pour les PME africaines. 
+                    Automatisez vos campagnes, fidélisez vos clients et boostez vos ventes avec des outils simples et puissants.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                    <button class="bg-gradient-to-r from-african-gold to-sunset-orange px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition-transform shadow-2xl">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Démarrer Maintenant - Gratuit
+                    </button>
+                    <button class="glass-effect px-8 py-4 rounded-full text-lg font-semibold hover:bg-white hover:bg-opacity-20 transition-all">
+                        <i class="fas fa-play mr-2"></i>
+                        Voir la Démonstration
+                    </button>
+                </div>
+                
+                <!-- Trust Indicators -->
+                <div class="flex flex-wrap justify-center items-center gap-8 text-gray-400">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-shield-alt text-safari-green"></i>
+                        <span>100% Sécurisé</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-users text-african-gold"></i>
+                        <span>500+ PME Africaines</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-language text-sky-blue"></i>
+                        <span>Support Multilingue</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating 3D Elements -->
+        <div class="absolute top-20 left-10 opacity-30 animate-float">
+            <div class="w-20 h-20 bg-gradient-to-r from-african-gold to-sunset-orange rounded-xl transform rotate-12"></div>
+        </div>
+        <div class="absolute bottom-20 right-10 opacity-30 animate-float" style="animation-delay: -3s;">
+            <div class="w-16 h-16 bg-gradient-to-r from-safari-green to-sky-blue rounded-full"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-900 bg-opacity-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    <span class="gradient-text">Fonctionnalités Puissantes</span><br>
+                    Conçues pour l'Afrique
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Des outils professionnels adaptés aux besoins spécifiques des entreprises africaines
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-gradient-to-r from-african-gold to-sunset-orange rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-magic text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-african-gold">Éditeur Drag & Drop</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Créez des emails professionnels en quelques minutes avec notre éditeur intuitif. 
+                        Plus de 50 templates adaptés aux secteurs africains.
+                    </p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-gradient-to-r from-safari-green to-sky-blue rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-users text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-safari-green">Segmentation Intelligente</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Ciblez précisément vos clients avec notre IA de segmentation. 
+                        Augmentez vos taux d'ouverture de +300% en moyenne.
+                    </p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-gradient-to-r from-sunset-orange to-african-gold rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-mobile-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-sunset-orange">Mobile Money Intégré</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Acceptez les paiements Orange Money, MTN Money et Airtel Money. 
+                        La solution complète pour l'écosystème africain.
+                    </p>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="400">
+                    <div class="w-16 h-16 bg-gradient-to-r from-sky-blue to-safari-green rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-sky-blue">Analytics Avancés</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Suivez vos performances en temps réel avec des métriques adaptées au marché africain. 
+                        ROI, engagement, conversion - tout y est.
+                    </p>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="500">
+                    <div class="w-16 h-16 bg-gradient-to-r from-earth-brown to-sunset-orange rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-earth-brown">Automatisation IA</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Campagnes automatisées intelligentes : bienvenue, relance panier, fidélisation. 
+                        Travaillez moins, vendez plus.
+                    </p>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="600">
+                    <div class="w-16 h-16 bg-gradient-to-r from-african-gold to-safari-green rounded-xl flex items-center justify-center mb-6">
+                        <i class="fas fa-globe-africa text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-african-gold">Support Multilingue</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        Interface en français, anglais et langues locales. 
+                        Support client dédié dans votre langue et fuseau horaire.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 bg-gradient-to-r from-safari-green to-sky-blue">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div data-aos="zoom-in" data-aos-delay="100">
+                    <div class="text-5xl font-bold text-white mb-2">500+</div>
+                    <div class="text-xl text-gray-100">PME Africaines</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="200">
+                    <div class="text-5xl font-bold text-white mb-2">10M+</div>
+                    <div class="text-xl text-gray-100">Emails Envoyés</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="300">
+                    <div class="text-5xl font-bold text-white mb-2">35%</div>
+                    <div class="text-xl text-gray-100">Taux d'Ouverture</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="400">
+                    <div class="text-5xl font-bold text-white mb-2">15</div>
+                    <div class="text-xl text-gray-100">Pays Africains</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-900 bg-opacity-70">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    <span class="gradient-text">Tarifs Transparents</span><br>
+                    Adaptés à l'Afrique
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Des prix 70% moins chers que les solutions internationales, 
+                    avec la qualité professionnelle que vous méritez
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-african-gold mb-4">Starter</h3>
+                        <div class="text-4xl font-bold mb-2">Gratuit</div>
+                        <div class="text-gray-400">Pour commencer</div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>1,000 contacts</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>5,000 emails/mois</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Templates de base</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Support email</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gradient-to-r from-african-gold to-sunset-orange py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+                        Commencer Gratuitement
+                    </button>
+                </div>
+                
+                <!-- Pro Plan -->
+                <div class="glass-effect p-8 rounded-2xl card-hover border-2 border-african-gold relative" data-aos="fade-up" data-aos-delay="200">
+                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-2 rounded-full text-sm font-bold">
+                        POPULAIRE
+                    </div>
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-african-gold mb-4">Professional</h3>
+                        <div class="text-4xl font-bold mb-2">25,000 FCFA</div>
+                        <div class="text-gray-400">par mois</div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>10,000 contacts</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>50,000 emails/mois</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Automatisation avancée</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Analytics détaillés</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Support prioritaire</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gradient-to-r from-african-gold to-sunset-orange py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+                        Choisir Professional
+                    </button>
+                </div>
+                
+                <!-- Enterprise Plan -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold text-african-gold mb-4">Enterprise</h3>
+                        <div class="text-4xl font-bold mb-2">Sur Mesure</div>
+                        <div class="text-gray-400">Pour grandes entreprises</div>
+                    </div>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Contacts illimités</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Emails illimités</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>API dédiée</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Manager dédié</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-safari-green mr-3"></i>
+                            <span>Formation incluse</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gradient-to-r from-african-gold to-sunset-orange py-3 rounded-full font-semibold hover:scale-105 transition-transform">
+                        Nous Contacter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-gradient-to-br from-purple-900 to-blue-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    <span class="gradient-text">Ils Nous Font Confiance</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Découvrez comment AfriMail Pro transforme les entreprises africaines
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-6">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=64&h=64&fit=crop&crop=face" 
+                             alt="Marie Ngono" class="w-16 h-16 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-african-gold">Marie Ngono</h4>
+                            <p class="text-gray-400">PDG, Mode Africaine Boutique</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">
+                        "Grâce à AfriMail Pro, mes ventes ont augmenté de 150% en 3 mois. 
+                        L'interface est si simple que je gère tout moi-même maintenant !"
+                    </p>
+                    <div class="flex text-african-gold mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center mb-6">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face" 
+                             alt="Paul Mbarga" class="w-16 h-16 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-african-gold">Paul Mbarga</h4>
+                            <p class="text-gray-400">Consultant AgriTech</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">
+                        "L'automatisation m'a fait gagner 10h par semaine. 
+                        Mes clients reçoivent du contenu personnalisé sans que j'aie à y penser."
+                    </p>
+                    <div class="flex text-african-gold mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="glass-effect p-8 rounded-2xl card-hover" data-aos="fade-up" data-aos-delay="300">
+                    <div class="flex items-center mb-6">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=face" 
+                             alt="Fatou Diallo" class="w-16 h-16 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-african-gold">Fatou Diallo</h4>
+                            <p class="text-gray-400">Directrice Marketing, Fintech</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-300 leading-relaxed">
+                        "Le support en français et l'intégration Mobile Money ont été des game-changers. 
+                        Enfin une solution pensée pour nous !"
+                    </p>
+                    <div class="flex text-african-gold mt-4">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                                                <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="py-20 bg-gray-900 bg-opacity-50">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <div class="lg:w-1/2" data-aos="fade-right">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        <span class="gradient-text">Essayez AfriMail Pro</span><br>
+                        Sans Engagement
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                        Découvrez par vous-même comment notre plateforme peut transformer votre marketing email. 
+                        Créez votre compte gratuit en 2 minutes et envoyez vos premiers emails dès aujourd'hui.
+                    </p>
+                    <ul class="space-y-4 mb-8">
+                        <li class="flex items-center">
+                            <div class="w-8 h-8 bg-safari-green rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                            <span class="text-lg">Aucune carte bancaire requise</span>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-8 h-8 bg-safari-green rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                            <span class="text-lg">Support inclus même sur le plan gratuit</span>
+                        </li>
+                        <li class="flex items-center">
+                            <div class="w-8 h-8 bg-safari-green rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                            <span class="text-lg">Accès à toutes les fonctionnalités de base</span>
+                        </li>
+                    </ul>
+                    <button class="bg-gradient-to-r from-african-gold to-sunset-orange px-8 py-4 rounded-full text-lg font-semibold hover:scale-105 transition-transform shadow-2xl">
+                        <i class="fas fa-play mr-2"></i>
+                        Voir la Démonstration en Direct
+                    </button>
+                </div>
+                <div class="lg:w-1/2" data-aos="fade-left">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-african-gold to-sunset-orange rounded-2xl opacity-20 blur-lg"></div>
+                        <div class="relative bg-gray-800 rounded-2xl overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
+                                 alt="AfriMail Pro Dashboard" class="w-full h-auto">
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
+                                <h3 class="text-xl font-bold text-white">Interface AfriMail Pro</h3>
+                                <p class="text-gray-300">Simple, intuitive et puissante</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-20 bg-gray-900">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                    <span class="gradient-text">Questions Fréquentes</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Trouvez rapidement les réponses à vos questions sur AfriMail Pro
+                </p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto space-y-6">
+                <!-- FAQ Item 1 -->
+                <div class="glass-effect rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold">Comment AfriMail Pro est-il différent des autres plateformes ?</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-300">
+                            AfriMail Pro est spécialement conçu pour les besoins des entreprises africaines. Nous offrons :
+                            <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-300">
+                                <li>Des prix 70% moins chers que les solutions internationales</li>
+                                <li>Support multilingue (français, anglais, langues locales)</li>
+                                <li>Intégration native avec Mobile Money (Orange, MTN, Airtel)</li>
+                                <li>Des templates adaptés aux secteurs africains</li>
+                                <li>Une infrastructure locale pour une meilleure vitesse</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="glass-effect rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold">Quels types de paiement acceptez-vous ?</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-300">
+                            Nous comprenons les particularités du marché africain et proposons plusieurs options :
+                            <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-300">
+                                <li>Mobile Money (Orange Money, MTN Mobile Money, Airtel Money)</li>
+                                <li>Carte bancaire (Visa, Mastercard)</li>
+                                <li>Virement bancaire</li>
+                                <li>Paiement en plusieurs fois disponible pour les comptes Enterprise</li>
+                            </ul>
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="glass-effect rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold">Comment garantissez-vous la délivrabilité des emails ?</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-300">
+                            Nous utilisons une approche multi-couche pour maximiser la délivrabilité :
+                            <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-300">
+                                <li>Infrastructure SMTP premium avec réputation soigneusement gérée</li>
+                                <li>Authentification DKIM, SPF et DMARC configurée automatiquement</li>
+                                <li>Outils de vérification et nettoyage des listes d'emails</li>
+                                <li>Surveillance en temps réel des taux de rebond</li>
+                                <li>Conseils personnalisés pour améliorer votre réputation d'expéditeur</li>
+                            </ul>
+                            Nos clients atteignent en moyenne 95%+ de taux de délivrabilité.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="glass-effect rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold">Puis-je importer mes contacts existants ?</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-300">
+                            Absolument ! Nous supportons l'import depuis :
+                            <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-300">
+                                <li>Fichiers Excel (.xlsx, .xls)</li>
+                                <li>Fichiers CSV</li>
+                                <li>vCard (.vcf)</li>
+                                <li>Google Contacts</li>
+                                <li>API pour intégration avec votre CRM</li>
+                            </ul>
+                            Notre système nettoie automatiquement les doublons et valide les formats d'emails et numéros de téléphone africains.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="glass-effect rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="500">
+                    <button class="faq-toggle w-full flex justify-between items-center p-6 text-left">
+                        <h3 class="text-xl font-semibold">Quel support technique proposez-vous ?</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content px-6 pb-6 hidden">
+                        <p class="text-gray-300">
+                            Nous offrons un support exceptionnel adapté à l'Afrique :
+                            <ul class="list-disc pl-6 mt-2 space-y-2 text-gray-300">
+                                <li>Support email et chat en français et anglais</li>
+                                <li>Assistance téléphonique dans 15 pays africains</li>
+                                <li>Centre d'aide avec tutoriels vidéo</li>
+                                <li>Formations en ligne hebdomadaires</li>
+                                <li>Support prioritaire pour les comptes Professional et Enterprise</li>
+                                <li>Heures de support adaptées aux fuseaux horaires africains</li>
+                            </ul>
+                            Notre temps de réponse moyen est de moins de 2 heures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-safari-green to-sky-blue">
+        <div class="container mx-auto px-6 text-center">
+            <div data-aos="zoom-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-white">
+                    Prêt à booster votre marketing email ?
+                </h2>
+                <p class="text-xl text-gray-100 mb-8 max-w-3xl mx-auto">
+                    Rejoignez les 500+ PME africaines qui utilisent déjà AfriMail Pro pour développer leur business
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="bg-white text-safari-green px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-colors shadow-2xl">
+                        <i class="fas fa-rocket mr-2"></i>
+                        Commencer Gratuitement
+                    </button>
+                    <button class="bg-black bg-opacity-30 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-opacity-40 transition-colors">
+                        <i class="fas fa-phone-alt mr-2"></i>
+                        Parler à un Expert
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-900 bg-opacity-70">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div class="lg:w-1/2" data-aos="fade-right">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">
+                        <span class="gradient-text">Contactez Notre Équipe</span>
+                    </h2>
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                        Vous avez des questions spécifiques ? Notre équipe est là pour vous aider à trouver la meilleure solution pour votre entreprise.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Nos Bureaux</h4>
+                                <p class="text-gray-400">Yaoundé, Cameroun<br>Lagos, Nigeria<br>Nairobi, Kenya</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gradient-to-r from-safari-green to-sky-blue rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Email</h4>
+                                <p class="text-gray-400">contact@afrimailpro.com<br>support@afrimailpro.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gradient-to-r from-sunset-orange to-african-gold rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-phone-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Téléphone</h4>
+                                <p class="text-gray-400">+237 6XX XXX XXX (Cameroun)<br>+234 8XX XXX XXX (Nigeria)<br>+254 7XX XXX XXX (Kenya)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-gradient-to-r from-sky-blue to-safari-green rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg mb-1">Heures d'Ouverture</h4>
+                                <p class="text-gray-400">Lundi - Vendredi: 8h - 18h (GMT)<br>Samedi: 9h - 13h</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:w-1/2" data-aos="fade-left">
+                    <form class="glass-effect p-8 rounded-2xl">
+                        <div class="mb-6">
+                            <label for="name" class="block text-gray-300 mb-2">Nom Complet</label>
+                            <input type="text" id="name" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="email" class="block text-gray-300 mb-2">Email</label>
+                            <input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="phone" class="block text-gray-300 mb-2">Téléphone</label>
+                            <input type="tel" id="phone" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="subject" class="block text-gray-300 mb-2">Sujet</label>
+                            <select id="subject" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold">
+                                <option value="">Sélectionnez un sujet</option>
+                                <option value="sales">Demande Commerciale</option>
+                                <option value="support">Support Technique</option>
+                                <option value="partnership">Partenariat</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label for="message" class="block text-gray-300 mb-2">Message</label>
+                            <textarea id="message" rows="5" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-gradient-to-r from-african-gold to-sunset-orange py-4 rounded-full font-semibold hover:scale-105 transition-transform">
+                            Envoyer le Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center">
+                            <i class="fas fa-envelope text-white text-xl"></i>
+                        </div>
+                        <span class="text-2xl font-bold gradient-text">AfriMail Pro</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        La plateforme de marketing email conçue pour les PME africaines. 
+                        Connectez-vous avec vos clients comme jamais auparavant.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-african-gold transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-sky-blue transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-safari-green transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-sunset-orange transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Produit</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Fonctionnalités</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Tarifs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Intégrations</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Mises à Jour</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Applications</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Ressources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Guides</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Webinaires</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Statistiques</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-white">Entreprise</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">À Propos</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Carrières</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Partenaires</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Presse</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">
+                    © 2024 AfriMail Pro. Tous droits réservés.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Mentions Légales</a>
+                    <a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Confidentialité</a>
+                    <a href="#" class="text-gray-400 hover:text-african-gold transition-colors">CGU</a>
+                    <a href="#" class="text-gray-400 hover:text-african-gold transition-colors">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS animation library
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // FAQ toggle functionality
+        const faqToggles = document.querySelectorAll('.faq-toggle');
+        
+        faqToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const content = toggle.nextElementSibling;
+                const icon = toggle.querySelector('i');
+                
+                content.classList.toggle('hidden');
+                icon.classList.toggle('transform');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.add('bg-gray-900');
+                navbar.classList.remove('bg-opacity-50');
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.classList.remove('bg-gray-900');
+                navbar.classList.add('bg-opacity-50');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!-- Current: "bg-indigo-800 text-white", Default: "text-indigo-100 hover:bg-indigo-600" -->
+<a href="{% url 'marketing_dashboard' %}" class="{% if request.resolver_match.url_name == 'marketing_dashboard' %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-tachometer-alt mr-3 flex-shrink-0 text-indigo-300"></i>
+    Dashboard
+</a>
+
+<a href="{% url 'campaign_list' %}" class="{% if 'campaign' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-envelope mr-3 flex-shrink-0 text-indigo-300"></i>
+    Campaigns
+</a>
+
+<a href="{% url 'contact_list' %}" class="{% if 'contact' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-users mr-3 flex-shrink-0 text-indigo-300"></i>
+    Contacts
+</a>
+
+<a href="{% url 'template_list' %}" class="{% if 'template' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-file-alt mr-3 flex-shrink-0 text-indigo-300"></i>
+    Templates
+</a>
+
+<a href="{% url 'automation_list' %}" class="{% if 'automation' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-robot mr-3 flex-shrink-0 text-indigo-300"></i>
+    Automations
+</a>
+
+<a href="{% url 'analytics_dashboard' %}" class="{% if 'analytics' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-chart-line mr-3 flex-shrink-0 text-indigo-300"></i>
+    Analytics
+</a>
+
+<a href="{% url 'domain_list' %}" class="{% if 'domain' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-globe mr-3 flex-shrink-0 text-indigo-300"></i>
+    Domains
+</a>
+
+<a href="{% url 'settings' %}" class="{% if 'settings' in request.resolver_match.url_name %}bg-indigo-800 text-white{% else %}text-indigo-100 hover:bg-indigo-600{% endif %} group flex items-center px-2 py-2 text-sm font-medium rounded-md">
+    <i class="fas fa-cog mr-3 flex-shrink-0 text-indigo-300"></i>
+    Settings
+</a>

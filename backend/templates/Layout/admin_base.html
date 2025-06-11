@@ -1,0 +1,384 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AfriMail Pro - Administration{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/admin.css' %}">
+    
+    <!-- 3D Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+    <!-- 3D Background Animation -->
+    <div id="3d-bg" class="fixed inset-0 -z-10 opacity-10"></div>
+    
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="hidden md:flex md:flex-shrink-0">
+            <div class="flex flex-col w-64 bg-gradient-to-b from-indigo-900 to-blue-800 shadow-xl transform transition-all duration-300 ease-in-out hover:shadow-2xl">
+                <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
+                    <div class="flex items-center">
+                        <img src="{% static 'images/logo-white.png' %}" alt="AfriMail Pro" class="h-8 w-auto">
+                        <span class="ml-2 text-white font-bold text-lg">AfriMail Pro</span>
+                    </div>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <div class="flex items-center px-4 py-3 mb-4 bg-blue-700 rounded-lg shadow">
+                        <img class="w-10 h-10 rounded-full" src="{% static 'images/avatar-admin.png' %}" alt="Admin Avatar">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-white">Super Admin</p>
+                            <p class="text-xs font-medium text-blue-200">admin@afrimailpro.com</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="flex-1 space-y-2">
+                        <a href="{% url 'admin_dashboard' %}" class="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg group">
+                            <i class="fas fa-tachometer-alt mr-3 text-blue-300"></i>
+                            Tableau de bord
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-users mr-3 text-blue-300 group-hover:text-white"></i>
+                            Gestion des Utilisateurs
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-building mr-3 text-blue-300 group-hover:text-white"></i>
+                            Entreprises Client
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-globe mr-3 text-blue-300 group-hover:text-white"></i>
+                            Domaines Email
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-server mr-3 text-blue-300 group-hover:text-white"></i>
+                            Configuration SMTP
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-chart-bar mr-3 text-blue-300 group-hover:text-white"></i>
+                            Rapports & Analytics
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-credit-card mr-3 text-blue-300 group-hover:text-white"></i>
+                            Facturation
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-cog mr-3 text-blue-300 group-hover:text-white"></i>
+                            Paramètres
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="px-4 py-4 border-t border-blue-700">
+                    <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                        <i class="fas fa-sign-out-alt mr-3 text-blue-300 group-hover:text-white"></i>
+                        Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile sidebar -->
+        <div class="md:hidden fixed inset-0 z-40" id="mobile-sidebar" style="display: none;">
+            <div class="fixed inset-0 bg-gray-600 bg-opacity-75" id="sidebar-backdrop"></div>
+            <div class="relative flex flex-col w-72 h-full bg-gradient-to-b from-indigo-900 to-blue-800">
+                <div class="flex items-center justify-between h-16 px-4 bg-blue-900">
+                    <div class="flex items-center">
+                        <img src="{% static 'images/logo-white.png' %}" alt="AfriMail Pro" class="h-8 w-auto">
+                        <span class="ml-2 text-white font-bold text-lg">AfriMail Pro</span>
+                    </div>
+                    <button id="close-sidebar" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">
+                    <div class="flex items-center px-4 py-3 mb-4 bg-blue-700 rounded-lg shadow">
+                        <img class="w-10 h-10 rounded-full" src="{% static 'images/avatar-admin.png' %}" alt="Admin Avatar">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-white">Super Admin</p>
+                            <p class="text-xs font-medium text-blue-200">admin@afrimailpro.com</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="flex-1 space-y-2">
+                        <a href="{% url 'admin_dashboard' %}" class="flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-700 rounded-lg group">
+                            <i class="fas fa-tachometer-alt mr-3 text-blue-300"></i>
+                            Tableau de bord
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-users mr-3 text-blue-300 group-hover:text-white"></i>
+                            Gestion des Utilisateurs
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-building mr-3 text-blue-300 group-hover:text-white"></i>
+                            Entreprises Client
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-globe mr-3 text-blue-300 group-hover:text-white"></i>
+                            Domaines Email
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-server mr-3 text-blue-300 group-hover:text-white"></i>
+                            Configuration SMTP
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-chart-bar mr-3 text-blue-300 group-hover:text-white"></i>
+                            Rapports & Analytics
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-credit-card mr-3 text-blue-300 group-hover:text-white"></i>
+                            Facturation
+                        </a>
+                        
+                        <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                            <i class="fas fa-cog mr-3 text-blue-300 group-hover:text-white"></i>
+                            Paramètres
+                        </a>
+                    </nav>
+                </div>
+                
+                <div class="px-4 py-4 border-t border-blue-700">
+                    <a href="#" class="flex items-center px-4 py-2 text-sm font-medium text-blue-100 hover:text-white hover:bg-blue-600 rounded-lg group">
+                        <i class="fas fa-sign-out-alt mr-3 text-blue-300 group-hover:text-white"></i>
+                        Déconnexion
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="flex flex-col flex-1 overflow-hidden">
+            <!-- Top Navigation -->
+            <div class="flex items-center justify-between h-16 px-4 bg-white border-b border-gray-200 shadow-sm">
+                <div class="flex items-center">
+                    <button id="open-sidebar" class="md:hidden text-gray-500 hover:text-gray-600">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="ml-4 text-lg font-semibold text-gray-800">{% block page_title %}Tableau de bord{% endblock %}</h1>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button id="notifications-btn" class="p-1 text-gray-500 hover:text-blue-600 focus:outline-none">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                        <div id="notifications-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                            <div class="p-4 border-b border-gray-200">
+                                <h3 class="text-sm font-medium text-gray-800">Notifications</h3>
+                            </div>
+                            <div class="max-h-60 overflow-y-auto">
+                                <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-100">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 text-blue-500">
+                                            <i class="fas fa-server"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="font-medium">Nouveau serveur SMTP ajouté</p>
+                                            <p class="text-xs text-gray-500">Il y a 2 heures</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-100">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 text-green-500">
+                                            <i class="fas fa-user-plus"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="font-medium">Nouvelle entreprise inscrite</p>
+                                            <p class="text-xs text-gray-500">Aujourd'hui, 09:45</p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="#" class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
+                                    <div class="flex items-start">
+                                        <div class="flex-shrink-0 text-yellow-500">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="font-medium">Problème de délivrabilité détecté</p>
+                                            <p class="text-xs text-gray-500">Hier, 16:30</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="p-2 bg-gray-50 text-center">
+                                <a href="#" class="text-xs font-medium text-blue-600 hover:text-blue-800">Voir toutes les notifications</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <button id="user-menu-btn" class="flex items-center text-sm focus:outline-none">
+                            <img class="w-8 h-8 rounded-full" src="{% static 'images/avatar-admin.png' %}" alt="Admin Avatar">
+                            <span class="ml-2 text-gray-700 hidden md:inline">Super Admin</span>
+                            <i class="fas fa-chevron-down ml-1 text-gray-500 text-xs hidden md:inline"></i>
+                        </button>
+                        <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50 border border-gray-200">
+                            <div class="py-1">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Paramètres</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content Area -->
+            <div class="flex-1 overflow-auto bg-gray-50">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer Scripts -->
+    <script src="{% static 'js/admin.js' %}"></script>
+    
+    <!-- 3D Background Script -->
+    <script>
+        // Simple 3D background animation with Three.js
+        document.addEventListener('DOMContentLoaded', function() {
+            const bgContainer = document.getElementById('3d-bg');
+            
+            // Only initialize if container exists
+            if (bgContainer) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ alpha: true });
+                renderer.setSize(bgContainer.offsetWidth, bgContainer.offsetHeight);
+                bgContainer.appendChild(renderer.domElement);
+                
+                // Create particles
+                const particlesGeometry = new THREE.BufferGeometry();
+                const particlesCount = 500;
+                
+                const posArray = new Float32Array(particlesCount * 3);
+                
+                for(let i = 0; i < particlesCount * 3; i++) {
+                    posArray[i] = (Math.random() - 0.5) * 10;
+                }
+                
+                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                
+                const particlesMaterial = new THREE.PointsMaterial({
+                    size: 0.02,
+                    color: 0x3b82f6,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                
+                const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+                scene.add(particlesMesh);
+                
+                camera.position.z = 3;
+                
+                // Animation loop
+                function animate() {
+                    requestAnimationFrame(animate);
+                    
+                    particlesMesh.rotation.x += 0.0005;
+                    particlesMesh.rotation.y += 0.0005;
+                    
+                    renderer.render(scene, camera);
+                }
+                
+                animate();
+                
+                // Handle window resize
+                window.addEventListener('resize', function() {
+                    camera.aspect = bgContainer.offsetWidth / bgContainer.offsetHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(bgContainer.offsetWidth, bgContainer.offsetHeight);
+                });
+            }
+            
+            // Mobile sidebar toggle
+            const openSidebarBtn = document.getElementById('open-sidebar');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            
+            if (openSidebarBtn && mobileSidebar) {
+                openSidebarBtn.addEventListener('click', function() {
+                    mobileSidebar.style.display = 'block';
+                    setTimeout(() => {
+                        mobileSidebar.querySelector('div').style.transform = 'translateX(0)';
+                    }, 10);
+                });
+            }
+            
+            function closeSidebar() {
+                if (mobileSidebar) {
+                    mobileSidebar.querySelector('div').style.transform = 'translateX(-100%)';
+                    setTimeout(() => {
+                        mobileSidebar.style.display = 'none';
+                    }, 300);
+                }
+            }
+            
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', closeSidebar);
+            }
+            
+            if (sidebarBackdrop) {
+                sidebarBackdrop.addEventListener('click', closeSidebar);
+            }
+            
+            // Dropdown menus
+            const notificationsBtn = document.getElementById('notifications-btn');
+            const notificationsDropdown = document.getElementById('notifications-dropdown');
+            const userMenuBtn = document.getElementById('user-menu-btn');
+            const userMenuDropdown = document.getElementById('user-menu-dropdown');
+            
+            if (notificationsBtn && notificationsDropdown) {
+                notificationsBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notificationsDropdown.classList.toggle('hidden');
+                    userMenuDropdown.classList.add('hidden');
+                });
+            }
+            
+            if (userMenuBtn && userMenuDropdown) {
+                userMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userMenuDropdown.classList.toggle('hidden');
+                    notificationsDropdown.classList.add('hidden');
+                });
+            }
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                if (notificationsDropdown) notificationsDropdown.classList.add('hidden');
+                if (userMenuDropdown) userMenuDropdown.classList.add('hidden');
+            });
+        });
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

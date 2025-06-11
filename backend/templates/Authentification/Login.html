@@ -1,0 +1,333 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AfriMail Pro - Connexion</title>
+    <meta name="description" content="Connectez-vous à votre compte AfriMail Pro pour gérer vos campagnes email marketing.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'african-gold': '#FFD700',
+                        'safari-green': '#228B22',
+                        'sunset-orange': '#FF6B35',
+                        'earth-brown': '#8B4513',
+                        'sky-blue': '#87CEEB'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'bounce-gentle': 'bounceGentle 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translatey(0px)' },
+                            '50%': { transform: 'translatey(-20px)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        bounceGentle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        .gradient-text {
+            background: linear-gradient(135deg, #FFD700, #FF6B35);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .african-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(34, 139, 34, 0.1) 0%, transparent 50%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        
+        .floating-elements::before,
+        .floating-elements::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .floating-elements::before {
+            background: linear-gradient(45deg, #FFD700, #FF6B35);
+            top: 10%;
+            left: 10%;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .floating-elements::after {
+            background: linear-gradient(45deg, #228B22, #87CEEB);
+            bottom: 10%;
+            right: 10%;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-x-hidden">
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-effect transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope text-white text-xl"></i>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">AfriMail Pro</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="{% url 'homepage' %}" class="hover:text-african-gold transition-colors">Accueil</a>
+                    <button class="bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-2 rounded-full hover:scale-105 transition-transform">
+                        Créer un Compte
+                    </button>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden" id="mobile-menu-btn">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden hidden bg-gray-900 bg-opacity-95" id="mobile-menu">
+            <div class="px-6 py-4 space-y-4">
+                <a href="{% url 'homepage' %}" class="block hover:text-african-gold transition-colors">Accueil</a>
+                <button class="w-full bg-gradient-to-r from-african-gold to-sunset-orange px-6 py-3 rounded-full mt-4">
+                    Créer un Compte
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="relative min-h-screen flex items-center justify-center african-pattern">
+        <div class="floating-elements"></div>
+        <div class="container mx-auto px-6 py-20">
+            <div class="max-w-md mx-auto">
+                <div class="glass-effect p-8 rounded-2xl shadow-2xl card-hover">
+                    <div class="text-center mb-8">
+                        <div class="w-20 h-20 bg-gradient-to-r from-african-gold to-sunset-orange rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-envelope-open-text text-white text-3xl"></i>
+                        </div>
+                        <h1 class="text-3xl font-bold mb-2 gradient-text">Connexion</h1>
+                        <p class="text-gray-300">Accédez à votre tableau de bord AfriMail Pro</p>
+                    </div>
+                    
+                    <form class="space-y-6">
+                        <div>
+                            <label for="email" class="block text-gray-300 mb-2">Adresse Email</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-500"></i>
+                                </div>
+                                <input type="email" id="email" class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold" placeholder="votre@email.com" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label for="password" class="block text-gray-300 mb-2">Mot de Passe</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-500"></i>
+                                </div>
+                                <input type="password" id="password" class="w-full bg-gray-800 border border-gray-700 rounded-lg pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-african-gold" placeholder="••••••••" required>
+                                <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center" id="togglePassword">
+                                    <i class="fas fa-eye text-gray-500 hover:text-african-gold"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-african-gold focus:ring-african-gold border-gray-700 rounded bg-gray-800">
+                                <label for="remember-me" class="ml-2 block text-sm text-gray-300">Se souvenir de moi</label>
+                            </div>
+                            
+                            <div class="text-sm">
+                                <a href="{% url 'forgot_password' %}" class="font-medium text-african-gold hover:text-sunset-orange">Mot de passe oublié?</a>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-african-gold to-sunset-orange py-4 rounded-full font-semibold hover:scale-105 transition-transform flex items-center justify-center">
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Se Connecter
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-700"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-gray-800 text-gray-400">Ou continuer avec</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-2 gap-3">
+                            <a href="#" class="w-full inline-flex justify-center py-3 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
+                                <i class="fab fa-google text-african-gold mr-2"></i>
+                                Google
+                            </a>
+                            
+                            <a href="#" class="w-full inline-flex justify-center py-3 px-4 border border-gray-700 rounded-md shadow-sm bg-gray-800 text-sm font-medium text-gray-300 hover:bg-gray-700">
+                                <i class="fab fa-microsoft text-sky-blue mr-2"></i>
+                                Microsoft
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-400">
+                            Nouveau sur AfriMail Pro? 
+                            <a href="{% url 'register' %}" class="font-medium text-african-gold hover:text-sunset-orange">Créer un compte</a>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center text-gray-400 text-sm">
+                    <p>En vous connectant, vous acceptez nos <a href="{% url 'condiction' %}" class="text-african-gold hover:underline">Conditions d'Utilisation</a> et notre <a href="{% url 'policy' %}" class="text-african-gold hover:underline">Politique de Confidentialité</a>.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating 3D Elements -->
+        <div class="absolute top-20 left-10 opacity-30 animate-float">
+            <div class="w-20 h-20 bg-gradient-to-r from-african-gold to-sunset-orange rounded-xl transform rotate-12"></div>
+        </div>
+        <div class="absolute bottom-20 right-10 opacity-30 animate-float" style="animation-delay: -3s;">
+            <div class="w-16 h-16 bg-gradient-to-r from-safari-green to-sky-blue rounded-full"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="w-8 h-8 bg-gradient-to-r from-african-gold to-sunset-orange rounded-lg flex items-center justify-center">
+                        <i class="fas fa-envelope text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">AfriMail Pro</span>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-african-gold transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-sky-blue transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-safari-green transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-sunset-orange transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="mt-6 pt-6 border-t border-gray-800 text-center text-gray-400 text-sm">
+                <p>© 2024 AfriMail Pro. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', () => {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye text-gray-500 hover:text-african-gold"></i>' : '<i class="fas fa-eye-slash text-gray-500 hover:text-african-gold"></i>';
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.classList.add('bg-gray-900');
+                navbar.classList.remove('bg-opacity-50');
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.classList.remove('bg-gray-900');
+                navbar.classList.add('bg-opacity-50');
+            }
+        });
+    </script>
+</body>
+</html>
