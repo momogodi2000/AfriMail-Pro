@@ -114,4 +114,3 @@ admin_patterns = [
 urlpatterns = auth_patterns + dashboard_patterns + campaign_patterns + contact_patterns + template_patterns + analytics_patterns + automation_patterns + tracking_patterns + admin_patterns
 
 # Add app name for namespacing
-app_name = 'backend'
