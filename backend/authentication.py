@@ -652,3 +652,225 @@ class SecurityService:
         ]
         
         return domain not in blocked_domains
+    
+    @staticmethod
+    def get_user_permissions(user):
+        """Get user permissions based on role"""
+        if user.is_super_admin:
+            return {
+                'can_manage_users': True,
+                'can_view_analytics': True,
+                'can_manage_platform': True,
+                'can_access_api': True,
+                'can_manage_billing': True,
+                'can_export_data': True,
+                'can_delete_campaigns': True,
+                'can_manage_templates': True,
+                'max_contacts': 999999,
+                'max_emails_per_month': 999999,
+            }
+        elif user.is_marketing_manager:
+            limits = user.get_plan_limits()
+            return {
+                'can_manage_users': False,
+                'can_view_analytics': True,
+                'can_manage_platform': False,
+                'can_access_api': 'api_access' in limits['features'],
+                'can_manage_billing': True,
+                'can_export_data': True,
+                'can_delete_campaigns': True,
+                'can_manage_templates': True,
+                'max_contacts': limits['max_contacts'],
+                'max_emails_per_month': limits['max_emails_per_month'],
+            }
+        else:
+            return {
+                'can_manage_users': False,
+                'can_view_analytics': False,
+                'can_manage_platform': False,
+                'can_access_api': False,
+                'can_manage_billing': False,
+                'can_export_data': False,
+                'can_delete_campaigns': False,
+                'can_manage_templates': False,
+                'max_contacts': 0,
+                'max_emails_per_month': 0,
+            }
+    
+    @staticmethod
+    def check_suspicious_activity(user, request):
+        """Check for suspicious login activity"""
+        current_ip = SecurityService.get_client_ip(request)
+        
+        # Check if IP has changed significantly
+        if user.last_login_ip and user.last_login_ip != current_ip:
+            # This is a simple check - in production you'd want geolocation comparison
+            logger.warning(f"IP change detected for user {user.email}: {user.last_login_ip} -> {current_ip}")
+            return True
+        
+        # Check login frequency
+        recent_activities = UserActivity.objects.filter(
+            user=user,
+            activity_type='LOGIN',
+            created_at__gte=timezone.now() - timedelta(hours=1)
+        ).count()
+        
+        if recent_activities > 10:  # More than 10 logins in an hour
+            logger.warning(f"Frequent login attempts detected for user {user.email}")
+            return True
+        
+        return False
+    
+    @staticmethod
+    def get_client_ip(request):
+        """Get client IP address from request"""
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            ip = x_forwarded_for.split(',')[0].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR', '')
+        return ip
+    
+    @staticmethod
+    def sanitize_input(data):
+        """Sanitize user input"""
+        if isinstance(data, str):
+            # Remove potentially dangerous characters
+            data = re.sub(r'[<>"\']', '', data)
+            data = data.strip()
+        return data
+    
+    @staticmethod
+    def generate_csrf_token():
+        """Generate CSRF token"""
+        return secrets.token_urlsafe(32)
+    
+    @staticmethod
+    def validate_session(request):
+        """Validate user session"""
+        if not request.user.is_authenticated:
+            return False
+        
+        # Check session age
+        session_age = request.session.get('login_time')
+        if session_age:
+            login_time = timezone.datetime.fromisoformat(session_age)
+            if timezone.now() - login_time > timedelta(hours=24):
+                return False
+        
+        return True
+
+
+class TwoFactorAuthService:
+    """Two-factor authentication service"""
+    
+    @staticmethod
+    def generate_totp_secret():
+        """Generate TOTP secret for 2FA"""
+        return secrets.token_urlsafe(32)
+    
+    @staticmethod
+    def generate_backup_codes():
+        """Generate backup codes for 2FA"""
+        return SecurityService.generate_backup_codes()
+    
+    @staticmethod
+    def send_sms_code(phone_number, code):
+        """Send SMS verification code"""
+        # This would integrate with SMS service like Twilio
+        # For now, just log the code
+        logger.info(f"SMS code {code} would be sent to {phone_number}")
+        return True
+    
+    @staticmethod
+    def verify_totp_code(secret, code):
+        """Verify TOTP code"""
+        # This would use a library like pyotp
+        # For now, return True for demo
+        return True
+    
+    @staticmethod
+    def enable_2fa_for_user(user, method='app'):
+        """Enable 2FA for user"""
+        if not hasattr(user, 'profile'):
+            UserProfile.objects.create(user=user)
+        
+        # Generate secret and backup codes
+        secret = TwoFactorAuthService.generate_totp_secret()
+        backup_codes = TwoFactorAuthService.generate_backup_codes()
+        
+        # Store in user profile (you'd want to encrypt these)
+        user.profile.two_factor_enabled = True
+        user.profile.two_factor_method = method
+        user.profile.totp_secret = secret
+        user.profile.backup_codes = backup_codes
+        user.profile.save()
+        
+        return {
+            'secret': secret,
+            'backup_codes': backup_codes,
+            'qr_code_url': f"otpauth://totp/AfriMail Pro:{user.email}?secret={secret}&issuer=AfriMail Pro"
+        }
+
+
+class SessionManager:
+    """Session management utilities"""
+    
+    @staticmethod
+    def create_session(user, request):
+        """Create user session with security measures"""
+        # Set session data
+        request.session['user_id'] = str(user.id)
+        request.session['login_time'] = timezone.now().isoformat()
+        request.session['ip_address'] = SecurityService.get_client_ip(request)
+        
+        # Set session expiry
+        request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+        
+        # Log session creation
+        UserActivity.log_activity(
+            user=user,
+            activity_type='SESSION_CREATED',
+            description='User session created',
+            request=request
+        )
+    
+    @staticmethod
+    def destroy_session(request):
+        """Safely destroy user session"""
+        request.session.flush()
+    
+    @staticmethod
+    def get_active_sessions(user):
+        """Get active sessions for user"""
+        from django.contrib.sessions.models import Session
+        from django.contrib.auth import SESSION_KEY
+        
+        sessions = []
+        for session in Session.objects.filter(expire_date__gte=timezone.now()):
+            data = session.get_decoded()
+            if data.get('user_id') == str(user.id):
+                sessions.append({
+                    'session_key': session.session_key,
+                    'ip_address': data.get('ip_address'),
+                    'login_time': data.get('login_time'),
+                    'expire_date': session.expire_date,
+                })
+        
+        return sessions
+    
+    @staticmethod
+    def invalidate_all_sessions(user):
+        """Invalidate all sessions for user"""
+        from django.contrib.sessions.models import Session
+        
+        for session in Session.objects.filter(expire_date__gte=timezone.now()):
+            data = session.get_decoded()
+            if data.get('user_id') == str(user.id):
+                session.delete()
+        
+        UserActivity.log_activity(
+            user=user,
+            activity_type='ALL_SESSIONS_INVALIDATED',
+            description='All user sessions invalidated'
+        )
