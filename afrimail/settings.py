@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from decouple import config
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -19,37 +20,49 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ycv6j#yk2&hre$j9e-9reg@q=%sft^x8xb47e@y%yvwm)^+7uj'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-ycv6j#yk2&hre$j9e-9reg@q=%sft^x8xb47e@y%yvwm)^+7uj')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.render.com', 'afrimailpro.com', 'www.afrimailpro.com']
 
 # Application definition
-
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'backend',
-    'channels',
+    'django.contrib.humanize',
+]
+
+THIRD_PARTY_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
-    # Development tools (only add these)
-    'django_browser_reload',
-    'debug_toolbar',
-    'django_extensions',
+    'channels',
+    'crispy_forms',
+    'crispy_tailwind',
+    'taggit',
 ]
+
+LOCAL_APPS = [
+    'backend',
+]
+
+if DEBUG:
+    THIRD_PARTY_APPS += [
+        'django_browser_reload',
+        'debug_toolbar',
+        'django_extensions',
+    ]
+
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,42 +72,42 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_browser_reload.middleware.BrowserReloadMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE += [
+        'django_browser_reload.middleware.BrowserReloadMiddleware',
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ]
 
 ROOT_URLCONF = 'afrimail.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'backend.context_processors.global_context',
             ],
         },
     },
 ]
 
-
 # Session settings for automatic logout after inactivity
 SESSION_COOKIE_AGE = 3600  # 1 hour in seconds
 SESSION_SAVE_EVERY_REQUEST = True  # Reset the session age on each request
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session alive when browser is closed (controlled by SESSION_COOKIE_AGE)
-
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session alive when browser is closed
 
 WSGI_APPLICATION = 'afrimail.wsgi.application'
 ASGI_APPLICATION = 'afrimail.asgi.application'
 
-
-
 # Channels configuration
-
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
@@ -111,34 +124,52 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024  # 5MB
 FILE_UPLOAD_PERMISSIONS = 0o644
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 
-
 # REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20
 }
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT', '5432'),
+        }
+    }
 
+# Custom User Model
+AUTH_USER_MODEL = 'backend.CustomUser'
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -148,48 +179,160 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Africa/Douala'
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
-# Static files (CSS, JavaScript, Images)
-STATIC_URL = 'static/'
-
+# Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
-# Yagmail configuration
-YAGMAIL_USER = 'yvangodimomo@gmail.com'  # The email address you want to send from
-YAGMAIL_PASSWORD = 'pzls apph esje cgdl'  # For Gmail, you might need an app password
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Email configuration for yagmail
+# Crispy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"
+
+# Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'yvangodimomo@gmail.com')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Move to environment variable
+EMAIL_HOST = config('DEFAULT_EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('DEFAULT_EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('DEFAULT_EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('DEFAULT_EMAIL_USER', default='')
+EMAIL_HOST_PASSWORD = config('DEFAULT_EMAIL_PASSWORD', default='')
 
-# Debug Toolbar Settings
+# Platform Settings
+PLATFORM_EMAIL = config('PLATFORM_EMAIL', default='noreply@afrimailpro.com')
+PLATFORM_NAME = config('PLATFORM_NAME', default='AfriMail Pro')
+
+# Celery Configuration
+CELERY_BROKER_URL = config('REDIS_URL', default='redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = config('REDIS_URL', default='redis://localhost:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+
+# Cache Configuration
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Security Settings
+if not DEBUG:
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# Debug Toolbar
 if DEBUG:
     import socket
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
 
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'afrimail.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'backend': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+# Create logs directory
+os.makedirs(BASE_DIR / 'logs', exist_ok=True)
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# AfriMail Pro Specific Settings
+AFRIMAIL_SETTINGS = {
+    'MAX_CONTACTS_PER_USER': {
+        'STARTER': 2500,
+        'PROFESSIONAL': 15000,
+        'ENTERPRISE': 999999,
+    },
+    'MAX_EMAILS_PER_MONTH': {
+        'STARTER': 25000,
+        'PROFESSIONAL': 150000,
+        'ENTERPRISE': 500000,
+    },
+    'FEATURES': {
+        'STARTER': ['basic_templates', 'email_analytics', 'contact_management'],
+        'PROFESSIONAL': ['advanced_templates', 'automation', 'api_access', 'custom_domains'],
+        'ENTERPRISE': ['white_label', 'dedicated_support', 'advanced_analytics', 'custom_integrations'],
+    },
+    'DEFAULT_PLAN': 'STARTER',
+    'TRIAL_PERIOD_DAYS': 14,
+    'SUPPORTED_LANGUAGES': ['en', 'fr'],
+    'SUPPORTED_COUNTRIES': ['CM', 'NG', 'GH', 'CI', 'SN', 'GA', 'TD', 'CF'],
+    'PRICING': {
+        'STARTER': {'monthly': 15000, 'yearly': 150000},  # FCFA
+        'PROFESSIONAL': {'monthly': 45000, 'yearly': 450000},  # FCFA
+        'ENTERPRISE': {'monthly': 120000, 'yearly': 1200000},  # FCFA
+    }
+}
+
+# PWA Settings
+PWA_APP_NAME = 'AfriMail Pro'
+PWA_APP_DESCRIPTION = "Professional Email Marketing Platform for African Businesses"
+PWA_APP_THEME_COLOR = '#0F172A'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
